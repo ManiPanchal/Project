@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<style>
+  h1 {
+    text-align: center;
+  }
+
+  table {
+    width: 70%;
+    margin-left: 200px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+  }
+
+  table,
+  th,
+  tr,
+  td {
+    border: 1px solid rgb(144, 222, 245);
+    border-collapse: collapse;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  tr {
+    height: 40px;
+  }
+
+  .bttn {
+    border-radius: 5px;
+    /* width:10%; */
+    text-decoration: none;
+    color: black;
+    border: none;
+    background-color: rgb(91, 200, 200);
+    font-size: 17px;
+    padding: 12px;
+    margin: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-left: 80px;
+  }
+
+  /* Dropdown Button */
+  .dropbtn {
+    background-color: rgb(91, 200, 200);
+    border-radius: 5px;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    padding-bottom: 0;
+  }
+
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover,
+  .dropbtn:focus {
+    background-color: rgb(91, 200, 200);
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    float: left;
+    position: relative;
+    left: 5px;
+    /* display: inline-block; */
+
+
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {
+    display: block;
+  }
+
+  .danger {
+    border-radius: 5px;
+    /* width:10%; */
+    text-decoration: none;
+    color: black;
+    border: none;
+    background-color: rgb(212, 87, 87);
+    font-size: 17px;
+    padding: 12px;
+    margin: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-left: 80px;
+  }
+
+  caption {
+    font-weight: bold;
+    font-size: 30px;
+    color: green
+  }
+</style>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<body>
+  <div class="dropdown">
+    <button onclick="myFunction()" class="dropbtn"><span class="material-symbols-outlined">
+        list
+      </span></p>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="/changepassword">Change Password</a>
+        <a href="/logout">Logout</a>
+        <a href="/admin">Manage Product</a>
+      </div>
+  </div>
+  <h1>Welcome Admin</h1>
+  <div id="Users">
+    <table id="table">
+      <caption>Sellers Request</caption>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Aadhar Number</th>
+        <th>Option</th>
+      </tr>
+    </table>
+  </div>
+  <div id="already">
+    <table id="table2">
+      <caption>Sellers</caption>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Aadhar Number</th>
+        <th>State</th>
+      </tr>
+    </table>
+  </div>
+</body>
+<script>
+  let count1 = 0, count2 = 0;
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  // Close the dropdown menu if the user clicks outside of it
+  window.onclick = function (event) {
+    if (!event.target.matches('.material-symbols-outlined',)) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+  const request = new XMLHttpRequest();
+  request.open("POST", "/manage");
+  request.setRequestHeader("Content-Type", "application/json");
+  request.send();
+  request.addEventListener("load", () => {
+    let data = request.responseText;
+    data = JSON.parse(data);
+    create(data);
+    function create(data) {
+      // console.log(data);
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].is_verified != "Verified") {
+
+          count1++;
+          let table = document.getElementById("table");
+          // if(document.getElementById("table2").getElementsByTagName("tr").length==0){
+          //  count2++;
+          // }
+          let row = document.createElement("tr");
+          let cell1 = document.createElement("td");
+          cell1.innerHTML = data[i].s_name;
+          let cell2 = document.createElement("td");
+          cell2.innerHTML = data[i].s_email;
+          let cell3 = document.createElement("td");
+          cell3.innerHTML = data[i].s_aadhar;
+          let btn = document.createElement("button");
+          btn.innerHTML = "Verify";
+          btn.setAttribute("class", "bttn");
+          let btn2 = document.createElement("button");
+          btn2.innerHTML = "Reject";
+          btn2.setAttribute("class", "danger");
+          row.appendChild(cell1);
+          row.appendChild(cell2);
+          row.appendChild(cell3);
+          row.appendChild(btn);
+          row.appendChild(btn2);
+          btn2.addEventListener("click", reject);
+          btn.addEventListener("click", update_role);
+          table.appendChild(row);
+        }
+        if (data[i].is_verified == "Verified") {
+          count2++;
+          let table2 = document.getElementById("table2");
+          // if(document.getElementById("table").getElementsByTagName("tr").length==0){
+          //   count1++;
+          // }
+          let row = document.createElement("tr");
+          let cell1 = document.createElement("td");
+          cell1.innerHTML = data[i].s_name;
+          let cell2 = document.createElement("td");
+          cell2.innerHTML = data[i].s_email;
+          let cell3 = document.createElement("td");
+          cell3.innerHTML = data[i].s_aadhar;
+          //   let btn=document.createElement("button");
+          // btn.innerHTML="Block";
+          // btn.setAttribute("class","bttn");
+          let cell4 = document.createElement("td");
+          cell4.innerHTML = data[i].is_verified;
+          // btn2.setAttribute("class","danger");
+          row.appendChild(cell1);
+          row.appendChild(cell2);
+          row.appendChild(cell3);
+
+          //  row.appendChild(btn);
+          row.appendChild(cell4);
+          //  btn2.addEventListener("click",block);
+          table2.appendChild(row);
+
+        }
+      }
+      if (count1 == 0) {
+        let table = document.getElementById("table");
+        let row = document.createElement("tr");
+        let cell1 = document.createElement("td");
+        cell1.colSpan = "4";
+        cell1.innerHTML = "No Sellers Request yet!!!";
+        cell1.style.color = "red";
+        row.appendChild(cell1);
+        table.appendChild(row);
+      }
+      if (count2 == 0) {
+        let table = document.getElementById("table2");
+        let row = document.createElement("tr");
+        let cell1 = document.createElement("td");
+        cell1.colSpan = "4";
+        cell1.innerHTML = "No Verified sellers ";
+        cell1.style.color = "red";
+        row.appendChild(cell1);
+        table.appendChild(row);
+      }
+      // console.log(document.getElementById("table").getElementsByTagName("tr").length);
+      // console.log(document.getElementById("table2").getElementsByTagName("tr").length)
+      if (document.getElementById("table").getElementsByTagName("tr").length == 1) {
+        let table = document.getElementById("table");
+        let row = document.createElement("tr");
+        let cell1 = document.createElement("td");
+        cell1.colSpan = "4";
+        cell1.innerHTML = "No Sellers Request yet!!!";
+        cell1.style.color = "red";
+        row.appendChild(cell1);
+        table.appendChild(row);
+      }
+      if (document.getElementById("table2").getElementsByTagName("tr").length == 1) {
+        let table = document.getElementById("table2");
+        let row = document.createElement("tr");
+        let cell1 = document.createElement("td");
+        cell1.colSpan = "4";
+        cell1.innerHTML = "No Verified sellers ";
+        cell1.style.color = "red";
+        row.appendChild(cell1);
+        table.appendChild(row);
+      }
+    }
+    function update_role(e) {
+      // console.log(select.options[select.selectedIndex].value);
+      let name = e.target.parentNode.getElementsByTagName("td")[0].innerHTML;
+      let aad = e.target.parentNode.getElementsByTagName("td")[2].innerHTML;
+      let email = e.target.parentNode.getElementsByTagName("td")[1].innerHTML;
+      let data2 = [];
+      let obj = { s_name: name, s_email: email, s_aadhar: aad, is_verified: "Verified" };
+      data2.push(obj);
+      // let role=e.target.parentNode.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value;
+      // console.log(email);
+      const request = new XMLHttpRequest();
+      request.open("POST", "/update_role");
+      request.setRequestHeader("Content-Type", "application/json");
+      request.send(JSON.stringify({ email: email }));
+      request.addEventListener("load", () => {
+        if (request.responseText == "ok") {
+          swal({
+            title: "Seller Verified successfully",
+            icon: "success"
+          })
+          e.target.parentNode.remove();
+          //  count2++;
+          //  count1=0;
+          create(data2);
+          if (document.getElementById("table2").getElementsByTagName("tr").length >= 2) {
+            // console.log(document.getElementById("table2").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML);
+            if (document.getElementById("table2").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML == "No Verified sellers ") {
+              document.getElementById("table2").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].parentNode.remove();
+            }
+          }
+        }
+        else if (request.responseText == "okk") {
+          swal({
+            title: "Something went wrong",
+            icon: "warning"
+          })
+        }
+      }
+      )
+    }
+    function reject(e) {
+      swal({
+        title: "Are You Sure?",
+        icon: "warning",
+        showCancelButton: true,
+        buttons: ["No", "Yes"],
+        dangerMode: true
+      }).then(
+        function (isConfirm) {
+          if (isConfirm) {
+            // let name=e.target.parentNode.getElementsByTagName("td")[0].innerHTML;
+            // let aad=e.target.parentNode.getElementsByTagName("td")[2].innerHTML;
+            let email = e.target.parentNode.getElementsByTagName("td")[1].innerHTML;
+            // let data2=[];
+            // let obj={s_name:name,s_email:email,s_aadhar:aad,is_verified:"Verified"};
+            // data.push(obj);
+            // let email=e.target.parentNode.getElementsByTagName("td")[1].innerHTML;
+            const request = new XMLHttpRequest();
+            request.open("POST", "/reject");
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify({ email: email }));
+            request.addEventListener("load", () => {
+              if (request.responseText == "ok") {
+                swal({
+                  title: "Seller Rejected Successfully",
+                  icon: "success"
+                })
+                e.target.parentNode.remove();
+                if (document.getElementById("table").getElementsByTagName("tr").length == 1) {
+                  let table = document.getElementById("table");
+                  let row = document.createElement("tr");
+                  let cell1 = document.createElement("td");
+                  cell1.colSpan = "4";
+                  cell1.innerHTML = "No Sellers Request yet!!!";
+                  cell1.style.color = "red";
+                  row.appendChild(cell1);
+                  table.appendChild(row);
+
+
+                  // console.log(document.getElementById("table").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML);
+                  // if(document.getElementById("table").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML=="No Sellers Request yet!!!")
+                  // {
+                  //   document.getElementById("table").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].parentNode.remove();
+                  // }
+                }
+              }
+              else if (request.responseText == "okk") {
+                swal({
+                  title: "Something went wrong",
+                  icon: "warning"
+                })
+              }
+            })
+
+          }
+
+        })
+    }
+    function block(e) {
+      swal({
+        title: "Are You Sure?",
+        icon: "warning",
+        showCancelButton: true,
+        buttons: ["No", "Yes"],
+        dangerMode: true
+      }).then(
+        function (isConfirm) {
+          if (isConfirm) {
+            let name = e.target.parentNode.getElementsByTagName("td")[0].innerHTML;
+            let aad = e.target.parentNode.getElementsByTagName("td")[2].innerHTML;
+            let email = e.target.parentNode.getElementsByTagName("td")[1].innerHTML;
+            let data2 = [];
+            let obj = { s_name: name, s_email: email, s_aadhar: aad, is_verified: "NotVerified" };
+            data2.push(obj);
+            // let email=e.target.parentNode.getElementsByTagName("td")[1].innerHTML;
+            const request = new XMLHttpRequest();
+            request.open("POST", "/block");
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify({ email: email }));
+            request.addEventListener("load", () => {
+              if (request.responseText == "ok") {
+                swal({
+                  title: "Seller Blocked Successfully",
+                  icon: "success"
+                })
+                e.target.parentNode.remove();
+                //  count1++;
+                //  count2=0;
+                create(data2);
+                //  console.log(document.getElementById("table").getElementsByTagName("tr").length==2);
+                if (document.getElementById("table").getElementsByTagName("tr").length >= 2) {
+                  // console.log(document.getElementById("table").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML);
+                  if (document.getElementById("table").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML == "No Sellers Request yet!!!") {
+                    document.getElementById("table").getElementsByTagName("tr")[1].getElementsByTagName("td")[0].parentNode.remove();
+                  }
+                }
+              }
+              else if (request.responseText == "okk") {
+                swal({
+                  title: "Something went wrong",
+                  icon: "warning"
+                })
+              }
+            })
+
+          }
+
+        })
+    }
+  })
+
+</script>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <style>
+        h1{text-align: center;}
+        caption{font-weight: bold;font-size:30px;color:red}
+        table{width:70%;margin-left: 200px;
+            box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 5px;}
+        table,th,tr,td{border: 1px solid rgb(144, 222, 245);
+        border-collapse: collapse;}
+        td{text-align: center;}
+        tr{height: 40px;}
+        .dropbtn {
+  background-color:rgb(91, 200, 200);
+  border-radius: 5px;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  padding-bottom: 0;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color:rgb(91, 200, 200);
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  float:left;
+  position: relative;
+  left:5px;
+  /* display: inline-block; */
+  
+  
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+img{width:40%;height:20%}
+</style>
+    <body>
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn"><span class="material-symbols-outlined">
+              list
+              </span></p>
+            <div id="myDropdown" class="dropdown-content">
+              <a href="/changepassword">Change Password</a>
+              <a href="/logout">Logout</a>
+              <a href="/admin">Manage Product</a>
+              <a href="/managerole">Manage Role</a>
+            </div>
+          </div>
+        <h1>Welcome Admin</h1>
+        <div id="Users">
+            <table id="table">
+              <caption>Product Details</caption>
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Product Id</th>
+                    <th>State</th>
+                </tr>
+            </table>
+        </div>
+       
+    </body>
+</html>

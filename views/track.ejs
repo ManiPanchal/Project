@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        table{width:70%;margin-left: 200px;
+                box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;margin-top: 200px;}
+            table,th,tr,td{border: 1px solid rgb(144, 222, 245);
+            border-collapse: collapse;}
+            td{text-align: center;}
+            tr{height: 40px;}
+            caption{font-weight: bold;font-size:30px;color:green}
+        .container{
+            width:100%;
+        }
+        .progressbar{
+          counter-reset: step;
+        }
+        .progressbar li{
+            list-style-type: none;
+            float:left;
+            width: 25%;
+            position: relative;
+            text-align: center;
+            /* justify-content: space-between; */
+        }
+        
+        .progressbar li:before{
+            content: counter(step);
+            counter-increment: step;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border:1px solid #ddd;
+            display:block;
+            text-align: center ;
+            margin: 0 auto 10px auto;
+            border-radius: 50%;
+            background-color: white;
+        }
+        .progressbar li:after
+        {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height:1px;
+            background-color: #ddd;
+            top:20px;
+            left:-50%;
+            z-index: -1;
+        }
+        .progressbar li:first-child:after{
+            content: none;
+        }
+        .progressbar li.active{
+            color:green;
+            
+        }
+        .progressbar li.active:before{
+            border-color: green;
+            /* background-color: rgb(250, 70, 4); */
+            
+        }
+        .progressbar li.active +li:after{
+            background-color: green;
+        }
+        h1{
+            text-align: center;
+            background-color:rgb(184, 237, 237) ;
+            padding: 10px;
+            margin-bottom: 60px;
+        }
+        img{width:40%;height:20%}
+        a{
+    border-radius: 5px; 
+    text-decoration: none;
+    color: black;
+    border:none;
+    background-color: rgb(91, 200, 200);
+    margin:10px;
+    box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+} 
+p{font-size: 20px;color: black;}
+h2{width:100%;padding: 20px;}
+a{float:left;padding:10px;}
+    </style>
+    <body>
+        <a href="myorders">Back</a>
+        <h1>Track Order</h1>
+        <div class="container">
+            <div class="progressbar">
+            <li class="active">Order Placed Successfully<p id="first"></p></li>
+            <li>Dispatched By Seller<p id="second"></p></li>
+            <li>Dispatched By State Dispatcher<p id="third"></p></li>
+            <li>Delivered <p id="fourth"></p></li><br>
+            </div>
+        </div>
+        <div id="users">
+            <!-- <h1>Product Details</h1> -->
+            <table id="table">
+              <caption>Product Details</caption>
+              <th>Image</th>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Product Id</th>
+              <th>Quantity</th>
+              <th>Deliver At</th>
+            </table>
+        </div>
+    </body>
+    <script>
+        const request=new XMLHttpRequest();
+        request.open("POST","/gettrackproduct");
+        request.setRequestHeader("content-type","application/json");
+        request.send();
+        request.addEventListener("load",()=>{
+            // console.log(request.responseText);
+            let data=JSON.parse(request.responseText);
+            let table=document.getElementById("table");
+            let row=document.createElement("tr");
+            let cell1=document.createElement("td");
+            cell1.style.width="20%";
+            let img=document.createElement("img");
+                 let img1=data[0].image;
+                 img.setAttribute("src",`profile/${img1}`);
+                 cell1.appendChild(img);
+                 row.appendChild(cell1);
+                 let cell2=document.createElement("td");
+                 cell2.innerHTML=data[0].productname;
+                 row.appendChild(cell2);
+                 let cell3=document.createElement("td");
+                 cell3.innerHTML=data[0].product_id;
+                 row.appendChild(cell3);
+                 let cell4=document.createElement("td");
+                 cell4.innerHTML=data[0].price;
+                 row.appendChild(cell4);
+                 let cell5=document.createElement("td");
+                 cell5.innerHTML=data[0].quantity;
+                 row.appendChild(cell5);
+                 let cell6=document.createElement("td");
+                 cell6.innerHTML=data[0].street_add;
+                 row.appendChild(cell6);
+                 table.appendChild(row);
+                 let bar=document.getElementsByClassName("progressbar")[0].getElementsByTagName("li");
+                 if(data[0].state=="Ordered")
+                 {
+                    let date=data[0].order_date;
+                    date=date.split("G");
+                    document.getElementById("first").innerHTML=date[0];
+                 }
+                 if(data[0].state=="Dispatched By Seller")
+                 {
+                    // console.log(bar[1].getElementsByTagName("p"));
+                    let date=data[0].order_date;
+                    date=date.split("G");
+                    document.getElementById("first").innerHTML=date[0];
+                    let date2=data[0].seller_d;
+                    date2=date2.split("G");
+                    document.getElementById("second").innerHTML=date2[0];
+                     bar[1].classList.add("active");
+                 }
+                 if(data[0].state=="Dispatched By State Dispatcher")
+                 {
+                    // console.log(document.getElementById("first"));
+                    let date=data[0].order_date;
+                    date=date.split("G");
+                    document.getElementById("first").innerHTML=date[0];
+                    let date2=data[0].seller_d;
+                    date2=date2.split("G");
+                    document.getElementById("second").innerHTML=date2[0];
+                    let date3=data[0].state_d;
+                    date3=date3.split("G");
+                    document.getElementById("third").innerHTML=date3[0];
+                    // bar[1].getElementsByTagName("p")[0].innerHTML=data[0].seller_d;
+                    bar[1].classList.add("active");
+                    bar[2].classList.add("active");
+                 }
+                 if(data[0].state=="Delivered")
+                 {
+                    let date=data[0].order_date;
+                    date=date.split("G");
+                    document.getElementById("first").innerHTML=date[0];
+                    let date2=data[0].seller_d;
+                    date2=date2.split("G");
+                    document.getElementById("second").innerHTML=date2[0];
+                    let date3=data[0].state_d;
+                    date3=date3.split("G");
+                    document.getElementById("third").innerHTML=date3[0];
+                    let date4=data[0].city_d;
+                    date4=date4.split("G");
+                    document.getElementById("fourth").innerHTML=date4[0];
+                    bar[1].classList.add("active");
+                    bar[2].classList.add("active");
+                    bar[3].classList.add("active");
+                 }
+                 if(data[0].state=="Cancelled")
+                 {
+                    table.style.marginTop="100px";
+                    let bar2=document.getElementsByClassName("progressbar")[0];
+                    bar2.style.color="red";
+                    let container=document.getElementsByClassName("container")[0];
+                    let h3=document.createElement("h2");
+                    h3.innerHTML="Order Cancelled";
+                    h3.style.color="red";
+                    h3.style.textAlign="center";
+                    h3.style.display="inline-block";
+                    container.appendChild(h3);
+                    // console.log(document.getElementsByClassName("progressbar")[0].getElementsByTagName("li"));
+                    let date=data[0].order_date;
+                    date=date.split("G");
+                    document.getElementById("first").innerHTML=date[0];
+                    let date2=data[0].seller_d;
+                    date2=date2.split("G");
+                    document.getElementById("second").innerHTML=date2[0];
+                    let date3=data[0].state_d;
+                    date3=date3.split("G");
+                    document.getElementById("third").innerHTML=date3[0];
+                 }
+                //  console.log(bar);
+        })
+    </script>
+</html>

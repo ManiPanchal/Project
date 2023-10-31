@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./header.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+     </head>
+    <body><div id="body"> 
+        <span id="user">Welcome <%=data %></span>
+        <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn"><span class="material-symbols-outlined">
+            list
+            </span></p>
+          <div id="myDropdown" class="dropdown-content">
+            <a href="/changepassword">Change Password</a>
+            <a href="/logout">Logout</a>
+            <a href="/view_cart">view Cart</a>
+            <a href="/myorders">My Orders</a>
+           
+          </div>
+        </div>
+        <h1>E-MART</h1>
+        <input type="search" id="search" placeholder="Search...">
+       </div>
+    </body>
+    <script>
+      function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+window.onclick = function(event) {
+  if (!event.target.matches('.material-symbols-outlined',)) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+    </script>
+    </html>

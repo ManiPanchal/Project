@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="./addproducts.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    </head>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <body>
+    <div id="main">
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn"><span class="material-symbols-outlined">
+              list
+              </span></p>
+            <div id="myDropdown" class="dropdown-content">
+              <!-- <a href="/changepassword">Change Password</a> -->
+              <a href="/logout">Logout</a>
+              <a href="/deleted">Rejected Products</a>
+              <a href="/existing">Update Products</a>
+              <a href="/orderrequest">Orders</a>
+              <a href="/report">Orders Report</a>
+              <!-- <a href="/many">Add Multiple</a> -->
+            </div>
+          </div>
+        <!-- <a href="/changepassword" class="link">Change Password</a> -->
+        <!-- <a href="/logout" class="link float">Logout</a> -->
+        <h1>Welcome Seller</h1>
+        <div id="form">
+            <form>
+                <label>Product Name:</label>
+                <input type="text" name="product_name" placeholder="Product Name" id="p_name"required><br><br>
+                <label>Product Discription:</label>
+                <input type="text" name="discription" placeholder="Discription" id="dis" required><br><br>
+                <label>Product Price:</label>
+                <input type="number" name="price" placeholder="Price" id="p_price" min=1 required><br><br>
+                <label>Product Quantity:</label>
+                <input type="number" name="quantity" placeholder="Quantity" id="quan" min=1 required><br><br>
+                <label>Product Image:</label><br><br>
+                <input type="file" name="image" accept=".jpeg,.jpg,.png" id="file_uploads" required><br><br>
+                <input type="button" value="Add Product" id="btn">
+            </form>
+        </div>
+    </div>
+    <div id="second"></div>   
+    </body>
+    <script src="./addproducts.js"></script>
+</html>

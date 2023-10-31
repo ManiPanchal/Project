@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<style>
+    #search {
+        border-radius: 5px;
+        /* width:10%; */
+        text-decoration: none;
+        color: black;
+        border: none;
+        background-color: rgb(91, 200, 200);
+        font-size: 17px;
+        padding: 12px;
+        margin: 8px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-left: 80px;
+    }
+
+    .dropbtn {
+        background-color: rgb(91, 200, 200);
+        border-radius: 5px;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        padding-bottom: 0;
+    }
+
+    .dropbtn:hover,
+    .dropbtn:focus {
+        background-color: rgb(91, 200, 200);
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        float: left;
+        position: relative;
+        left: 5px;
+        /* display: inline-block; */
+
+
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #ddd;
+    }
+
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    .show {
+        display: block;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    caption {
+        font-weight: bold;
+        font-size: 30px;
+        color: red
+    }
+
+    table {
+        width: 70%;
+        margin-left: 200px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 5px;
+    }
+
+    table,
+    th,
+    tr,
+    td {
+        border: 1px solid rgb(144, 222, 245);
+        border-collapse: collapse;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    tr {
+        height: 40px;
+    }
+
+    select {
+        width: 70%;
+        padding: 5px;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .none {
+        display: none;
+    }
+
+    img {
+        width: 40%;
+        height: 20%
+    }
+</style>
+
+<body>
+    <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn"><span class="material-symbols-outlined">
+                list
+            </span></p>
+            <div id="myDropdown" class="dropdown-content">
+                <!-- <a href="/changepassword">Change Password</a> -->
+                <a href="/logout">Logout</a>
+                <a href="/deleted">Rejected Products</a>
+                <a href="/seller">Add Products</a>
+                <a href="/orderrequest">Orders</a>
+                <a href="/existing">Update Products</a>
+            </div>
+    </div>
+    <h1>Welcome Seller</h1>
+    <div id="Users">
+        <table id="table">
+            <caption>Select Month to see Report</caption>
+            <tr>
+                <th>MONTH</th>
+                <th>YEAR</th>
+                <th>Search</th>
+                <!-- <th>Product ID</th>
+                    <th>Quantity</th>
+                    <th>Price</th> -->
+            </tr>
+            <tr>
+                <td>
+                    <select id="select">
+                        <option disabled selected value> -- select an option -- </option>
+                        <option value="Jan">Jan</option>
+                        <option value="Feb">Feb</option>
+                        <option value="March">March</option>
+                        <option value="Apr">Apr</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="Aug">Aug</option>
+                        <option value="Sept">Sept</option>
+                        <option value="Oct">Oct</option>
+                        <option value="Nov">Nov</option>
+                        <option value="Dec">Dec</option>
+                    </select>
+                </td>
+                <td>
+                    2023
+                </td>
+                <td>
+                    <button id="search">Search</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="already" class="none">
+        <table id="table2">
+            <caption>Delivered Goods</caption>
+            <tr>
+                <th>Image</th>
+                <th>Product Id</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+
+                <!-- <th>User email</th> -->
+                <!-- <th>State</th> -->
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+    let q = [];
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.material-symbols-outlined',)) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+    let already = document.getElementById("already");
+    let search = document.getElementById("search");
+    let table2 = document.getElementById("table2");
+    search.addEventListener("click", fun_se);
+    function fun_se(e) {
+        already.classList.add("none");
+        //  console.log(table2.getElementsByTagName("tr").length);
+        for (let k = 1; k < table2.getElementsByTagName("tr").length; k++) {
+            table2.getElementsByTagName("tr")[k].remove();
+        }
+        let select = document.getElementById("select");
+        // console.log(select.value);
+        if (select.value == "") {
+            swal({
+                title: "Please Select a Option",
+                icon: "warning"
+            })
+        }
+        else {
+            const request = new XMLHttpRequest();
+            request.open("POST", "/postorderfind");
+            request.setRequestHeader("content-type", "application/json");
+            request.send();
+            request.addEventListener("load", () => {
+                // console.log(JSON.parse(request.responseText));
+                let data = JSON.parse(request.responseText);
+                // console.log(data);
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].state == "Delivered") {
+                        let date = data[i].city_d.split(" ");
+                        // console.log(date[1]);
+                        if (date[1].match(select.value)) {
+                            already.classList.remove("none");
+                            already.classList.add("block");
+                            table2 = document.getElementById("table2");
+                            let row = document.createElement("tr");
+                            let cell1 = document.createElement("td");
+                            cell1.style.width = "10%";
+                            let img = document.createElement("img");
+                            let img1 = data[i].image;
+                            img.setAttribute("src", `profile/${img1}`);
+                            cell1.appendChild(img);
+                            row.appendChild(cell1);
+                            let cell2 = document.createElement("td");
+                            cell2.innerHTML = data[i].product_id;
+                            row.appendChild(cell2);
+                            const request = new XMLHttpRequest();
+                            request.open("POST", "/findcount");
+                            request.setRequestHeader("content-type", "application/json");
+                            request.send(JSON.stringify({ id: data[i].product_id }));
+                            request.addEventListener("load", () => {
+                                // console.log(request.responseText);
+                                q = JSON.parse(request.responseText);
+                                // console.log(q);
+                                let cell3 = document.createElement("td");
+                                cell3.innerHTML = q[0].quantity;
+                                row.appendChild(cell3);
+                                // console.log(q);
+                                let cell4 = document.createElement("td");
+                                let pr = data[i].price.split(".");
+                                cell4.innerHTML = "Rs." + q[0].quantity * pr[1];
+                                row.appendChild(cell4);
+                            })
+
+                            table2.appendChild(row);
+                        }
+                    }
+                }
+                // console.log(already);
+                if (already.classList.contains("none")) {
+                    swal({
+                        title: "No Products Available",
+                        icon: "warning"
+                    })
+                }
+            })
+        }
+    }
+
+</script>
+
+</html>

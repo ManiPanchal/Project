@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    table {
+        width: 80%;
+        margin-left: 200px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 5px;
+    }
+
+    table,
+    th,
+    tr,
+    td {
+        border: 1px solid rgb(144, 222, 245);
+        border-collapse: collapse;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    tr {
+        height: 40px;
+    }
+
+    .block {
+        /* color:red; */
+        display: block;
+    }
+
+    .none {
+        display: none;
+    }
+
+    #noorders {
+        color: red;
+    }
+
+    caption {
+        font-weight: bold;
+        font-size: 30px;
+        color: green
+    }
+
+    .bttn {
+        border-radius: 5px;
+        /* width:10%; */
+        text-decoration: none;
+        color: black;
+        border: none;
+        background-color: rgb(91, 200, 200);
+        font-size: 17px;
+        padding: 12px;
+        margin: 8px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /* margin-left: 80px; */
+    }
+
+    img {
+        width: 40%;
+        height: 40%
+    }
+
+    a {
+        border-radius: 5px;
+        text-decoration: none;
+        color: black;
+        border: none;
+        background-color: rgb(91, 200, 200);
+        margin: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        padding: 10px;
+        margin: 10px;
+        float: left;
+    }
+
+    .danger {
+        border-radius: 5px;
+        /* width:10%; */
+        text-decoration: none;
+        color: black;
+        border: none;
+        background-color: rgb(212, 87, 87);
+        font-size: 17px;
+        padding: 12px;
+        margin: 8px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /* margin-left: 80px; */
+    }
+
+    #main {
+        background-color: aliceblue;
+        margin-left: 350px;
+        width: 50%;
+        max-height: 60%;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        text-align: center;
+        margin-top: 30px;
+        line-height: 25px;
+        padding: 5px;
+    }
+
+    #amount {
+        margin-left: 50px;
+    }
+
+    #total {
+        margin-left: 50px;
+    }
+
+    #para {
+        text-align: center;
+        color: green;
+        font-weight: bold;
+    }
+
+    #free {
+        color: green;
+        margin-left: 50px;
+    }
+</style>
+
+<body>
+    <a href="/product">Back</a>
+    <div id="noorders" class="none">
+        <h1>No Orders Yet!!!</h1>
+    </div>
+    <div id="first" class="none">
+        <table id="table">
+            <caption>MY ORDERS</caption>
+            <tr>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Product Id</th>
+                <th>Price</th>
+                <!-- <th>State</th> -->
+                <th>Order Date</th>
+                <th>Options</th>
+            </tr>
+        </table>
+    </div>
+    <div id="already" class="none">
+        <table id="table2">
+            <caption>Delivered</caption>
+            <tr>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Product Id</th>
+                <th>Price</th>
+                <th>State</th>
+                <th>Delivered on</th>
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+    // console.log(document.getElementsByTagName("tr").length);
+    const request = new XMLHttpRequest();
+    request.open("POST", "/myorders");
+    request.setRequestHeader("content-type", "application/json");
+    request.send();
+    request.addEventListener("load", () => {
+        let data = JSON.parse(request.responseText);
+        // console.log(data);
+        if (data.length > 0) {
+            let first = document.getElementById("first");
+            first.classList.remove("none");
+            first.classList.add("block");
+            // console.log(data);
+            // let table=document.getElementById("table");
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].state != "Delivered") {
+
+                    // console.log(data[i].order_date.split(" "));
+                    let dt = data[i].order_date.split(" ");
+                    let str = "";
+                    for (let j = 0; j < 4; j++) {
+                        str = str + " " + dt[j];
+                    }
+                    //  console.log(str);
+                    let table = document.getElementById("table");
+                    let row = document.createElement("tr");
+                    let cell1 = document.createElement("td");
+                    cell1.style.width = "10%";
+                    let img = document.createElement("img");
+
+                    let img1 = data[i].image;
+                    img.setAttribute("src", `profile/${img1}`);
+                    cell1.appendChild(img);
+                    // cell1.innerHTML=data[i].image;
+                    // cell1.setAttribute("src",`profile/${cell1}`);
+                    row.appendChild(cell1);
+                    //   let cell=document.createElement("td");
+                    //   cell.innerHTML=data[i].product_id;
+                    //   row.appendChild(cell);
+                    let cell2 = document.createElement("td");
+                    cell2.innerHTML = data[i].productname;
+                    row.appendChild(cell2);
+                    let cell3 = document.createElement("td");
+                    cell3.innerHTML = data[i].quantity;
+                    row.appendChild(cell3);
+                    let cell6 = document.createElement("td");
+                    cell6.innerHTML = data[i].product_id;
+                    row.appendChild(cell6);
+                    let cell4 = document.createElement("td");
+                    cell4.innerHTML = data[i].price;
+                    row.appendChild(cell4);
+                    //   let cell=document.createElement("td");
+
+                    //   cell.innerHTML=data[i].state;
+                    //   row.appendChild(cell);
+                    let cell7 = document.createElement("td");
+                    cell7.innerHTML = str;
+                    row.appendChild(cell7);
+
+                    let cell5 = document.createElement("td");
+                    let btn2 = document.createElement("Button");
+                    btn2.setAttribute("class", "bttn");
+                    btn2.innerHTML = "Track Order";
+                    btn2.style.float = "left";
+                    btn2.style.fontSize = "12px";
+                    cell5.appendChild(btn2);
+                    let btn = document.createElement("Button");
+                    btn.innerHTML = "Cancel";
+                    btn.style.fontSize = "12px";
+                    btn.setAttribute("class", "danger");
+                    btn.style.float = "right";
+                    if (data[i].state == "Cancelled") {
+                        btn.style.backgroundColor = "orange";
+                        btn.disabled = true;
+                        btn.innerHTML = "Cancelled";
+                    }
+                    cell5.appendChild(btn);
+                    btn.addEventListener("click", cancel);
+                    btn2.addEventListener("click", track);
+                    row.appendChild(cell5);
+                    table.appendChild(row);
+                }
+                else {
+                    let already = document.getElementById("already");
+                    already.classList.remove("none");
+                    already.classList.add("block");
+                    let table = document.getElementById("table2");
+                    let row = document.createElement("tr");
+                    let cell1 = document.createElement("td");
+                    cell1.style.width = "10%";
+                    let img = document.createElement("img");
+                    let img1 = data[i].image;
+                    img.setAttribute("src", `profile/${img1}`);
+                    cell1.appendChild(img);
+                    // cell1.innerHTML=data[i].image;
+                    // cell1.setAttribute("src",`profile/${cell1}`);
+                    row.appendChild(cell1);
+                    //   let cell=document.createElement("td");
+                    //   cell.innerHTML=data[i].product_id;
+                    //   row.appendChild(cell);
+                    let cell2 = document.createElement("td");
+                    cell2.innerHTML = data[i].productname;
+                    row.appendChild(cell2);
+                    let cell3 = document.createElement("td");
+                    cell3.innerHTML = data[i].quantity;
+                    row.appendChild(cell3);
+                    let cell6 = document.createElement("td");
+                    cell6.innerHTML = data[i].product_id;
+                    row.appendChild(cell6);
+                    let cell4 = document.createElement("td");
+                    cell4.innerHTML = data[i].price;
+                    row.appendChild(cell4);
+                    let cell = document.createElement("td");
+                    cell.innerHTML = data[i].state;
+                    row.appendChild(cell);
+                    let cell5 = document.createElement("td");
+                    let d = data[i].city_d;
+                    d = d.split("G");
+                    cell5.innerHTML = d[0];
+                    row.appendChild(cell5);
+                    table.appendChild(row);
+                }
+            }
+        }
+        else {
+            let h1 = document.getElementById("noorders");
+            h1.classList.remove("none");
+            h1.classList.add("block");
+
+        }
+        function cancel(e) {
+            swal({
+                title: "Are You Sure?",
+                icon: "warning",
+                showCancelButton: true,
+                buttons: ["No", "Yes"],
+                dangerMode: true
+            }).then(
+                function (isConfirm) {
+                    if (isConfirm) {
+                        // console.log(e.target.parentNode.parentNode.getElementsByTagName("td")[1].innerHTML);
+                        let id = e.target.parentNode.parentNode.getElementsByTagName("td")[3].innerHTML;
+                        let q = e.target.parentNode.parentNode.getElementsByTagName("td")[2].innerHTML;
+                        const request = new XMLHttpRequest();
+                        request.open("POST", "/cancelorder");
+                        request.setRequestHeader("content-type", "application/json");
+                        request.send(JSON.stringify({ id: id, q: q }));
+                        request.addEventListener("load", () => {
+                            if (request.responseText == "ok") {
+                                swal({
+                                    title: "order cancel Successfully",
+                                    icon: "success"
+                                })
+                                //  e.target.innerHTML="Canceled";
+                                e.target.innerHTML = "Cancelled";
+                                e.target.disabled = true;
+                                e.target.style.backgroundColor = "orange";
+                            }
+                        })
+
+                    }
+                })
+        }
+        function track(e) {
+            //   console.log(e.target.parentNode.parentNode.getElementsByTagName("td")[3].innerHTML);
+            let id = e.target.parentNode.parentNode.getElementsByTagName("td")[3].innerHTML;
+            const request = new XMLHttpRequest();
+            request.open("POST", "/trackorder");
+            request.setRequestHeader("content-type", "application/json");
+            request.send(JSON.stringify({ id: id }));
+            request.addEventListener("load", () => {
+                if (request.responseText == "ok") {
+                    window.location.href = "/track";
+                }
+            })
+        }
+    })
+</script>
+
+</html>

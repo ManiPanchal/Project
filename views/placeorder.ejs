@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="../placeorder.css">
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 70%;
+            margin-left: 200px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+        }
+
+        table,
+        th,
+        tr,
+        td {
+            border: 1px solid rgb(144, 222, 245);
+            border-collapse: collapse;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        tr {
+            height: 40px;
+        }
+
+        caption {
+            font-weight: bold;
+            font-size: 30px;
+            color: green
+        }
+
+        a {
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+            border: none;
+            background-color: rgb(91, 200, 200);
+            margin: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 10px;
+            margin: 10px;
+            float: left;
+        }
+
+        #body {
+            background-color: rgb(184, 237, 237);
+            text-align: center;
+            padding: 18px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-sizing: border-box;
+            position: relative;
+        }
+    </style>
+</head>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.1/dist/sweetalert2.all.min.js"></script> -->
+
+<body>
+    <div id="body">
+        <a href="/view_cart">Back</a>
+        <h1>Confirm Order</h1>
+    </div>
+    <!-- <h1>Confirm Order</h1>
+        <a href="/view_cart">Back</a> -->
+    <div id="Users">
+        <table id="table">
+            <caption>Information</caption>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Pincode</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Phone Number</th>
+                <th>deliver on</th>
+            </tr>
+        </table>
+    </div>
+    <!-- <div>
+            <h3>Information</h3>
+            <label>Name:</label><label id="name"></label>
+            <label>Email:</label><label id="email"></label>
+            <label>Pincode:</label><label id="pincode"></label>
+            <label>State:</label><label id="state"></label>
+            <label>City:</label><label id="city"></label>
+            <label>Phone Number:</label><label id="phone"></label>
+        </div> -->
+    <div id="main">
+        <h1>Order Details</h1>
+        <p>Amount:<span id="amount"></span></p>
+        <p id="fr">Shipping:<span id="free">Free Shipping</span></p>
+        <p>Total Bill:<span id="total"></span></p>
+        <input type="button" id="order" value="Place Order" class="btn">
+        <p id="para" class="none">Your Order Placed Successfully And it will delivered soon!!</p>
+    </div>
+    <!-- <div id="btndiv"> <input type="button" id="cancel" value="Cancel Order" class="none btn">
+            <input type="button" id="track" value="Track Order" class="none btn"></div> -->
+
+    <h1>My Order</h1>
+    <div id="pro"></div>
+</body>
+<script>
+
+    var data;
+    let pro = document.getElementById("pro");
+    // let cancel=document.getElementById("cancel");
+    // let track=document.getElementById("track");
+    let para = document.getElementById("para");
+    let a = document.getElementById("amount");
+    let total = document.getElementById("total");
+    let btn = document.getElementById("order");
+
+    btn.addEventListener("click", fun);
+    function fun() {
+
+        const request = new XMLHttpRequest();
+        request.open("POST", "/saveto_table");
+        request.setRequestHeader("content-type", "application/json");
+        request.send(JSON.stringify(data));
+        request.addEventListener("load", () => {
+            if (request.responseText == "ok") {
+                swal({
+                    title: "Order Placed Successfully",
+                    icon: "success"
+                })
+                const request = new XMLHttpRequest();
+                request.open("POST", "/update_product");
+                request.setRequestHeader("content-type", "application/json");
+                request.send(JSON.stringify(data));
+                request.addEventListener("load", () => {
+                    if (request.responseText == "ok") {
+                        if (para.classList.contains("none")) {
+                            para.classList.remove("none");
+                            para.classList.add("block");
+                            btn.classList.remove("block");
+                            btn.classList.add("none");
+                        }
+                        const request = new XMLHttpRequest();
+                        request.open("POST", "/clear_cart");
+                        request.setRequestHeader("content-type", "application/json");
+                        request.send(JSON.stringify(data));
+                        //  request.addEventListener("load",()=>{
+                        //     //  console.log(request.responseText);
+                        //  })
+                    }
+                })
+
+            }
+        })
+
+
+    }
+    const request = new XMLHttpRequest();
+    request.open("POST", "/postorder");
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send();
+    request.addEventListener("load", () => {
+        // if(request.responseText=="ok")
+        // {
+        //     window.location.href="/buynow";
+        //     // const request=new XMLHttpRequest();
+        //     // request.open("GET","/buynow");
+        //     // // request.setRequestHeader('content-type',"application/json");
+        //     // request.send();
+        //     // // request.addEventListener("load",()=>{
+
+        //     // })
+        // }
+        data = request.responseText;
+        data = JSON.parse(data);
+        //  console.log(data);
+        if (data.length == 0) {
+            let item = document.createElement("h2");
+            item.innerHTML = "No Orders Yet!!";
+            item.style.color = "red";
+            item.style.fontSize = "50px";
+            item.style.marginLeft = "450px";
+            let main = document.getElementById("main");
+            main.style.display = "none";
+            pro.appendChild(item);
+        }
+        //  for(let j=0;j<data.length;j++)
+        {
+            let table = document.getElementById("table");
+            let row = document.createElement("tr");
+            let cell1 = document.createElement("td");
+            cell1.innerHTML = data[0][0].name;
+            row.appendChild(cell1);
+            let cell2 = document.createElement("td");
+            cell2.innerHTML = data[0][0].email;
+            row.appendChild(cell2);
+            let cell3 = document.createElement("td");
+            cell3.innerHTML = data[0][0].pincode;
+            row.appendChild(cell3);
+            let cell4 = document.createElement("td");
+            cell4.innerHTML = data[0][0].state_name;
+            row.appendChild(cell4);
+            let cell5 = document.createElement("td");
+            cell5.innerHTML = data[0][0].city;
+            row.appendChild(cell5);
+            let cell6 = document.createElement("td");
+            cell6.innerHTML = data[0][0].phone;
+            row.appendChild(cell6);
+            let cell7 = document.createElement("td");
+            var dt = new Date();
+            dt.setDate(dt.getDate() + 7);
+            let str = dateConverter(dt);
+
+            function dateConverter(str) {
+                var date = new Date(str),
+                    mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                    day = ("0" + date.getDate()).slice(-2);
+                
+                year = date.getFullYear();
+                return `${day}/${mnth}/${year}`
+            }
+            // console.log(dateConverter("Thu Jun 09 2011 00:00:00 GMT+0530 (India)"))
+
+
+            // str=str.split("G");
+            // str=JSON.stringify(str);
+            // str=str.split("G");
+            cell7.innerHTML = str;
+            row.appendChild(cell7);
+            table.appendChild(row);
+        }
+        for (let i = 0; i < data[1].length; i++) {
+
+            let item = document.createElement("div");
+            item.setAttribute("class", "img_div");
+            item.setAttribute("id", data[1][i].product_id);
+            let img = document.createElement("img");
+            let img1 = data[1][i].image;
+            img.setAttribute("src", `profile/${img1}`);
+            item.appendChild(img);
+            let p1 = document.createElement("p");
+            p1.innerHTML = data[1][i].productname;
+            item.appendChild(p1)
+            let p2 = document.createElement("p");
+            let pri = data[1][i].price.split(".");
+            pri = pri[1];
+            p2.innerHTML = data[1][i].price;
+            item.appendChild(p2);
+            let p3 = document.createElement("p");
+            p3.innerHTML = data[1][i].details;
+            p3.style.display = "none";
+            item.appendChild(p3);
+            let quantity = document.createElement("span");
+            quantity.innerHTML = "Quantity:" + data[1][i].curr_quantity;
+            quantity.setAttribute("id", "quantity-" + Math.random());
+            quantity.setAttribute("class", "s");
+            item.appendChild(quantity);
+            let p = document.createElement("p");
+            p.innerHTML = "Stocks not available";
+            p.setAttribute("id", "para");
+            p.style.display = "none";
+            item.appendChild(p);
+            let big = document.createElement("div");
+            big.style.display = "flex";
+            big.style.justifyContent = "space-between";
+            let cancel = document.createElement("input");
+            cancel.setAttribute("type", "button");
+            cancel.setAttribute("class", "cancel none btn");
+            cancel.setAttribute("id", "cancel-" + data[1][i].product_id);
+            cancel.setAttribute("value", "Cancel Order");
+            big.appendChild(cancel);
+            cancel.addEventListener("click", cancel_order);
+            let track = document.createElement("input");
+            track.setAttribute("type", "button");
+            track.setAttribute("class", "track none btn");
+            track.setAttribute("id", "track-" + data[1][i].product_id);
+            track.setAttribute("value", "Track Order");
+            big.appendChild(track);
+            item.appendChild(big);
+            pro.appendChild(item);
+        }
+        let amount = 0, i;
+        for (i = 0; i < data[1].length; i++) {
+            let price = data[1][i].price.split(".");
+            price = price[1] * data[1][i].curr_quantity;
+            amount = amount + price;
+        }
+        total.innerHTML = "Rs." + amount;
+        a.innerHTML = "Rs." + amount;
+        //  console.log(data);
+        if (data) {
+            for (let i = 0; i < data.length; i++) {
+                const request = new XMLHttpRequest();
+                request.open("POST", "/button");
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify({ email: data[i].email, id: data[i].product_id }));
+                request.addEventListener("load", () => {
+                    // console.log(request.responseText);
+                    if (request.responseText == "ok") {
+                        para.classList.add("block");
+                        btn.classList.add("none");
+                        // console.log(document.querySelector("#cancel-"+data[i].product_id));
+                        document.querySelector("#cancel-" + data[i].product_id).classList.remove("none");
+                        document.querySelector("#cancel-" + data[i].product_id).classList.add("block");
+
+                        // console.log(document.querySelector("#track-"+data[i].product_id));
+                        document.querySelector("#track-" + data[i].product_id).classList.remove("none");
+                        document.querySelector("#track-" + data[i].product_id).classList.add("block");
+                        // cancel.classList.add("block");
+                        // track.classList.add("block");
+                    }
+                })
+            }
+
+        }
+        function cancel_order(e) {
+            swal({
+                title: "Are you sure?",
+                icon: "warning",
+                showCancelButton: true,
+                buttons: ["No", "Yes"],
+                dangerMode: true
+            }).then(
+                function (isConfirm) {
+                    if (isConfirm) {
+                        let amount = 0;
+                        //  console.log(e.target.id);
+                        let id = e.target.id.split("-");
+                        let qu = e.target.parentNode.parentNode.getElementsByTagName("span")[0].innerHTML.split(":");
+                        const request = new XMLHttpRequest();
+                        request.open("POST", "/cancel_order");
+                        request.setRequestHeader("Content-Type", "application/json");
+                        request.send(JSON.stringify({ id: id[1], q: qu[1] }));
+                        request.addEventListener("load", () => {
+                            if (request.responseText == "ok") {
+                                swal({
+                                    title: "Order Cancelled Successfully",
+                                    icon: "success"
+                                })
+                                e.target.parentNode.parentNode.remove();
+                                let collection = document.getElementById("pro").getElementsByClassName("img_div");
+                                for (let i = 0; i < collection.length; i++) {
+                                    let div = document.getElementById("pro").getElementsByClassName("img_div")[i];
+                                    let price = div.getElementsByTagName("p")[1].innerHTML;
+                                    price = price.split(".");
+                                    let q = div.getElementsByTagName("span")[0].innerHTML;
+                                    q = q.split(":");
+                                    amount = amount + (q[1] * price[1]);
+                                }
+                                //  console.log(amount);
+                                a.innerHTML = amount;
+                                total.innerHTML = amount;
+
+                            }
+                        })
+                    }
+                })
+
+        }
+    })
+</script>
+
+</html>

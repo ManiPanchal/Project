@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- <link rel="stylesheet" href="./addproducts.css"> -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<style>
+  h1 {
+    text-align: center;
+  }
+
+  table {
+    width: 70%;
+    margin-left: 200px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+  }
+
+  table,
+  th,
+  tr,
+  td {
+    border: 1px solid rgb(144, 222, 245);
+    border-collapse: collapse;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  tr {
+    height: 40px;
+  }
+
+  .bttn {
+    border-radius: 5px;
+    /* width:10%; */
+    text-decoration: none;
+    color: black;
+    border: none;
+    background-color: rgb(91, 200, 200);
+    font-size: 17px;
+    padding: 12px;
+    margin: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-left: 80px;
+  }
+
+  /* Dropdown Button */
+  .dropbtn {
+    background-color: rgb(91, 200, 200);
+    border-radius: 5px;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    padding-bottom: 0;
+  }
+
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover,
+  .dropbtn:focus {
+    background-color: rgb(91, 200, 200);
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    float: left;
+    position: relative;
+    left: 5px;
+    /* display: inline-block; */
+
+
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {
+    display: block;
+  }
+
+  .danger {
+    border-radius: 5px;
+    /* width:10%; */
+    text-decoration: none;
+    color: black;
+    border: none;
+    background-color: rgb(212, 87, 87);
+    font-size: 17px;
+    padding: 12px;
+    margin: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-left: 80px;
+  }
+
+  caption {
+    font-weight: bold;
+    font-size: 30px;
+    color: green
+  }
+
+  img {
+    width: 40%;
+    height: 40%
+  }
+</style>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
+
+<body>
+  <div id="main">
+    <div class="dropdown">
+      <button onclick="myFunction()" class="dropbtn"><span class="material-symbols-outlined">
+          list
+        </span></p>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="/changepassword">Change Password</a>
+          <a href="/logout">Logout</a>
+          <a href="/managerole">Manage Role</a>
+        </div>
+    </div>
+    <!-- <a href="/changepassword" class="link">Change Password</a> -->
+    <!-- <a href="/logout" class="link float">Logout</a> -->
+    <h1>Welcome Admin</h1>
+    <div id="Users">
+      <table id="table">
+        <caption>Requested Products</caption>
+        <tr>
+          <th>Image</th>
+          <th>Product ID</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Option</th>
+        </tr>
+      </table>
+    </div>
+    <div id="already">
+      <table id="table2">
+        <caption>Products</caption>
+        <tr>
+          <th>Image</th>
+          <th>Product ID</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Option</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <!-- <div id="second"></div>    -->
+</body>
+<script>
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  // Close the dropdown menu if the user clicks outside of it
+  window.onclick = function (event) {
+    if (!event.target.matches('.material-symbols-outlined',)) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+  let count1 = 0, count2 = 0;
+  const request = new XMLHttpRequest();
+  request.open("POST", "/products");
+  request.setRequestHeader("Content-Type", "application/json");
+  request.send();
+  request.addEventListener("load", () => {
+    let data = JSON.parse(request.responseText);
+    // console.log(data);
+    create(data);
+    function create(data) {
+      console.log(data);
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].flag == "A") {
+          count2++;
+          let table2 = document.getElementById("table2");
+          let row = document.createElement("tr");
+          let cell1 = document.createElement("td");
+          cell1.style.width = "10%";
+          let img = document.createElement("img");
+          let img1 = data[i].image;
+          img.setAttribute("src", `profile/${img1}`);
+          cell1.appendChild(img);
+          // cell1.innerHTML=data[i].image;
+          // cell1.setAttribute("src",`profile/${cell1}`);
+
+          row.appendChild(cell1);
+          let cell = document.createElement("td");
+          cell.innerHTML = data[i].product_id;
+          row.appendChild(cell);
+          let cell2 = document.createElement("td");
+          cell2.innerHTML = data[i].productname;
+          row.appendChild(cell2);
+          let cell3 = document.createElement("td");
+          cell3.innerHTML = data[i].price;
+          row.appendChild(cell3);
+          let cell4 = document.createElement("td");
+          cell4.innerHTML = data[i].quantity;
+          row.appendChild(cell4);
+
+          let cell5 = document.createElement("td");
+          let btn = document.createElement("Button");
+          btn.setAttribute("class", "danger");
+          btn.innerHTML = "Delete";
+          cell5.style.width = "30%";
+          cell5.appendChild(btn);
+          btn.addEventListener("click", del);
+          row.appendChild(cell5);
+          table2.appendChild(row);
+        }
+        if (data[i].flag == "R") {
+          count1++;
+          let table = document.getElementById("table");
+          let row = document.createElement("tr");
+          let cell1 = document.createElement("td");
+          cell1.style.width = "10%";
+          let img = document.createElement("img");
+
+          let img1 = data[i].image;
+          img.setAttribute("src", `profile/${img1}`);
+          cell1.appendChild(img);
+          // cell1.innerHTML=data[i].image;
+          // cell1.setAttribute("src",`profile/${cell1}`);
+          row.appendChild(cell1);
+          let cell = document.createElement("td");
+          cell.innerHTML = data[i].product_id;
+          row.appendChild(cell);
+          let cell2 = document.createElement("td");
+          cell2.innerHTML = data[i].productname;
+          row.appendChild(cell2);
+          let cell3 = document.createElement("td");
+          cell3.innerHTML = data[i].price;
+          row.appendChild(cell3);
+          let cell4 = document.createElement("td");
+          cell4.innerHTML = data[i].quantity;
+          row.appendChild(cell4);
+          let cell5 = document.createElement("td");
+          let btn = document.createElement("Button");
+          btn.innerHTML = "Accept";
+          btn.setAttribute("class", "bttn");
+          cell5.appendChild(btn);
+          btn.addEventListener("click", accept);
+          let btn2 = document.createElement("Button");
+          btn2.setAttribute("class", "danger");
+          btn2.innerHTML = "Reject";
+          btn2.addEventListener("click", reject);
+          cell5.appendChild(btn2);
+          row.appendChild(cell5);
+          table.appendChild(row);
+        }
+      }
+    }
+    if (count1 == 0) {
+      let table = document.getElementById("table");
+      let row = document.createElement("tr");
+      let cell1 = document.createElement("td");
+      cell1.innerHTML = "No Requested Products";
+      cell1.colSpan = "6";
+      cell1.style.color = "red";
+      row.appendChild(cell1);
+      table.appendChild(row);
+    }
+    if (count2 == 0) {
+      let table2 = document.getElementById("table2");
+      let row = document.createElement("tr");
+      let cell1 = document.createElement("td");
+      cell1.innerHTML = "No Products";
+      cell1.colSpan = "6";
+      cell1.style.color = "red";
+      row.appendChild(cell1);
+      table2.appendChild(row);
+    }
+    function del(e) {
+      swal({
+        title: "Are You Sure?",
+        icon: "warning",
+        showCancelButton: true,
+        buttons: ["No", "Yes"],
+        dangerMode: true
+      }).then(
+        function (isConfirm) {
+          if (isConfirm) {
+            let id = e.target.parentNode.parentNode.getElementsByTagName("td")[1].innerHTML;
+            const request = new XMLHttpRequest();
+            request.open("POST", "/blockproduct");
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify({ id: id }));
+            request.addEventListener("load", () => {
+              if (request.responseText == "ok") {
+                swal({
+                  title: "Product Deleted successfully",
+                  icon: "success"
+                })
+                e.target.parentNode.parentNode.remove();
+              }
+            })
+          }
+        })
+    }
+    function accept(e) {
+      swal({
+        title: "Are You Sure?",
+        icon: "warning",
+        showCancelButton: true,
+        buttons: ["No", "Yes"],
+        dangerMode: true
+      }).then(
+        function (isConfirm) {
+          if (isConfirm) {
+            let id = e.target.parentNode.parentNode.getElementsByTagName("td")[1].innerHTML;
+            let image = e.target.parentNode.parentNode.getElementsByTagName("td")[0].innerHTML;
+            let name = e.target.parentNode.parentNode.getElementsByTagName("td")[2].innerHTML;
+            let price = e.target.parentNode.parentNode.getElementsByTagName("td")[3].innerHTML;
+            let quantity = e.target.parentNode.parentNode.getElementsByTagName("td")[4].innerHTML;
+            let data2 = [];
+            image = image.split("/");
+            image = image[1].split('"');
+            // console.log(image[0]);
+            let obj = { image: image[0], product_id: id, productname: name, price: price, quantity: quantity, flag: "A" };
+            data2.push(obj);
+            // console.log(data2);
+            const request = new XMLHttpRequest();
+            request.open("POST", "/acceptproduct");
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify({ id: id }));
+            request.addEventListener("load", () => {
+              if (request.responseText == "ok") {
+                swal({
+                  title: "Product Accepted successfully",
+                  icon: "success"
+                })
+                // console.log(e.target.parentNode);
+                e.target.parentNode.parentNode.remove();
+                console.log(data2);
+                create(data2);
+              }
+            })
+          }
+        })
+    }
+    function reject(e) {
+      let id = e.target.parentNode.parentNode.getElementsByTagName("td")[1].innerHTML;
+      swal({
+        title: "Are You Sure?",
+        icon: "warning",
+        showCancelButton: true,
+        buttons: ["No", "Yes"],
+        dangerMode: true
+      }).then(
+        function (isConfirm) {
+          if (isConfirm) {
+            const request = new XMLHttpRequest();
+            request.open("POST", "/rejectproduct");
+            request.setRequestHeader("content-type", "application/json");
+            request.send(JSON.stringify({ id: id }));
+            request.addEventListener("load", () => {
+              if (request.responseText == "ok") {
+                swal({
+                  title: "Product Rejected successfully",
+                  icon: "success"
+                })
+                // console.log(e.target.parentNode);
+                e.target.parentNode.parentNode.remove();
+                // create(data2);
+              }
+
+            }
+            )
+
+          }
+        })
+
+
+    }
+
+  })
+
+
+
+</script>
+<!-- <script src="./addproducts.js"></script> -->
+
+</html>
