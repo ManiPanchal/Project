@@ -1,7 +1,7 @@
 const { find_st } = require("./dbaorders")
 
 module.exports=(req,res)=>{
-    let data=find_st(req.session.email,req.session.pro_id)
+    let data=find_st(req.session.email,req.session.pro_id,req.session.pro_d)
     data.then(function(data)
     {
         if(data.length>0)

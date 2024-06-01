@@ -183,20 +183,6 @@ app.post("/postorderfind",postorderfind);
 app.get("/addmultiple",getmultiple);
 app.post("/nextproducts",postnextproducts);
 app.get("*",notfound);
-// dba.init()
-// .then(function()
-// {
-//     console.log("Database connected");
-//     app.listen(8000,()=>
-//     {
-//         console.log("server at 8000");
-//     });
-// })
-
-// .catch(function(err)
-//     {
-//        console.log(err);
-//     });
     app.listen(8000,()=>
     {
         console.log("server at 8000");

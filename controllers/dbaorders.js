@@ -110,14 +110,14 @@ function find()
         });
   })
 }
-function find_st(email,id)
+function find_st(email,id,d)
 {
   return new Promise(function(resolve,reject)
   {
     var con=connection();
         con.connect(function(err) {
           if (err) throw err;
-          con.query(`select * from products join orders on products.product_id=orders.product_id join user_info on orders.email=user_info.email where orders.email="${email}" AND orders.product_id="${id}"`, function (err, result, fields) {
+          con.query(`select * from products join orders on products.product_id=orders.product_id join user_info on orders.email=user_info.email where orders.email="${email}" AND orders.product_id="${id}" AND orders.order_date="${d}"`, function (err, result, fields) {
             if (err) return reject(err);
             if(result)
             {

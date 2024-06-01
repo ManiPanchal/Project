@@ -1,0 +1,24 @@
+em(id,last_name,first_name,depart,salary,h_date)
+select depart,avg(salary) as avg_salary from emp group by depart order by avg_salary limit 0,1;
+main()
+{
+    int arr[10],start=0,end=10;
+    read_array;
+    int find_ele=input_variable;
+    mid=(start+end)/2;
+    while(start<=end&& mid>=0)
+    {
+        if(a[mid]==find_ele)
+        {
+            print("mid");
+        }
+        else if(a[mid]>find){
+            start=mid+1;
+        }
+        else if(a[mid]<find)
+        {
+            end=mid-1;
+        }
+        mid=(start+end)/2;
+    }
+} 

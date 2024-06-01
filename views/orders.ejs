@@ -206,7 +206,7 @@
                     cell2.innerHTML = data[i].productname;
                     row.appendChild(cell2);
                     let cell3 = document.createElement("td");
-                    cell3.innerHTML = data[i].quantity;
+                    cell3.innerHTML = data[i].Quantity;
                     row.appendChild(cell3);
                     let cell6 = document.createElement("td");
                     cell6.innerHTML = data[i].product_id;
@@ -241,7 +241,7 @@
                     }
                     cell5.appendChild(btn);
                     btn.addEventListener("click", cancel);
-                    btn2.addEventListener("click", track);
+                    btn2.addEventListener("click", (e)=>track(e,data[i].order_date));
                     row.appendChild(cell5);
                     table.appendChild(row);
                 }
@@ -267,7 +267,7 @@
                     cell2.innerHTML = data[i].productname;
                     row.appendChild(cell2);
                     let cell3 = document.createElement("td");
-                    cell3.innerHTML = data[i].quantity;
+                    cell3.innerHTML = data[i].Quantity;
                     row.appendChild(cell3);
                     let cell6 = document.createElement("td");
                     cell6.innerHTML = data[i].product_id;
@@ -326,13 +326,14 @@
                     }
                 })
         }
-        function track(e) {
+        function track(e,d) {
+            console.log(d);
             //   console.log(e.target.parentNode.parentNode.getElementsByTagName("td")[3].innerHTML);
             let id = e.target.parentNode.parentNode.getElementsByTagName("td")[3].innerHTML;
             const request = new XMLHttpRequest();
             request.open("POST", "/trackorder");
             request.setRequestHeader("content-type", "application/json");
-            request.send(JSON.stringify({ id: id }));
+            request.send(JSON.stringify({ id: id ,d:d}));
             request.addEventListener("load", () => {
                 if (request.responseText == "ok") {
                     window.location.href = "/track";
